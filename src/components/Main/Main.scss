@@ -1,2 +1,49 @@
-.main {
+.navbar {
+    z-index: 1;
+    position: fixed;
+    width: 100%;
+    box-shadow: 0 1px 5px -1px gray;
+    background-color: white;
+}
+
+.nav-container {
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.nav-element {
+    position: relative;
+}
+
+////////////////////////
+
+.main-container {
+    padding-top: 7%;
+}
+
+.main-card {
+    margin-bottom: 1%;
+}
+
+.card-name {
+    height: 100%; 
+    text-align: center; 
+    display: table;
+    width: 100%;
+    text-align: left;
+
+    & h1 {
+        display:table-cell; vertical-align:middle;
+    }
+}
+
+.card-flag {
+    height: 100%; 
+    text-align: center; 
+    display: table;
+    width: 100%;
+}
+
+.flag {
+    display:table-cell; vertical-align:middle;
 }
