@@ -15,14 +15,24 @@
     position: relative;
 }
 
-////////////////////////
+//////////////////////////////
 
 .main-container {
     padding-top: 7%;
 }
 
 .main-card {
+    transform: scale(1);
     margin-bottom: 1%;
+    margin-top: 1%;
+
+    transition-duration: 0.5s;
+
+    &:hover {
+        transform: scale(1.05);
+        margin-bottom: 2%;
+        margin-top: 2%;
+    }
 }
 
 .card-name {
@@ -31,9 +41,15 @@
     display: table;
     width: 100%;
     text-align: left;
+    margin-left: 5%;
+    margin-top: 2%;
+    margin-bottom: 2%;
 
     & h1 {
-        display:table-cell; vertical-align:middle;
+        display: table-cell; 
+        vertical-align: middle;
+        font-family: 'Nunito Sans', sans-serif;
+        font-size: 2rem;
     }
 }
 
@@ -42,8 +58,16 @@
     text-align: center; 
     display: table;
     width: 100%;
+
+    .flag {
+        display: table-cell; 
+        vertical-align: middle;
+    }
 }
 
-.flag {
-    display:table-cell; vertical-align:middle;
+.alpha3 {
+    border: solid 2px black;
+    border-radius: 5px;
+    padding-left: 1%;
+    padding-right: 1%;
 }
