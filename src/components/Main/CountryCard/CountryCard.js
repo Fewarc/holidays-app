@@ -28,7 +28,7 @@ function CountryCard(props) {
                             <Grid item xs={2}>
                                 <div className="vert-center">
                                     <div className="holidays">
-                                        <Link to={`/calendar/${props.country.alpha3Code}`}>
+                                        <Link to={`/calendar/${props.country.alpha2Code}`}>
                                             <Button>
                                                 CALENDAR
                                             </Button>

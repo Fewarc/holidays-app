@@ -17,7 +17,8 @@ function Main() {
     const [filterPhrase, setFilterPhrase] = useState('');
 
     useEffect(() => {
-        fetchCountries().then(res => {
+        fetchCountries()
+        .then(res => {
             setCountries(res.data.map(country => ({ ...country, fav: false })) );
             setCountriesToRender({ ...countriesToRender, countries: res.data.map(country => ({ ...country, fav: false })) });
             setFavCountries([]);
