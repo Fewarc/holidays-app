@@ -1,18 +1,32 @@
-import React, { useEffect } from 'react';
-import { fetchHolidays } from '../../api/api';
+import { Container } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { getHolidays } from '../../actions/calendar.js';
 
 function CountryHoliday({ match }) {
-    
+    const dispatch = useDispatch();
+    const cahcedCalendar = useSelector( (state) => state.calendar );
+
+    const [calendarData, setCalendarData] = useState({
+        country: match.params.alpha2,
+        year: new Date().getFullYear() - 1,
+        month: new Date().getMonth()
+    });
+
     useEffect(() => {
-        fetchHolidays(match.params.alpha2, new Date().getFullYear())
-        .then(res => {
-            console.log(res);
-        });
+        dispatch(getHolidays(calendarData.country, calendarData.year));
     }, []);
+
+    useEffect(() => {
+        
+    }, [/** TODO */])
 
     return (
     <div>
-        XD
+        <Container maxWidth="md">
+
+        </Container>
     </div>);
 };
 

@@ -1,13 +1,17 @@
-import { Button, Card, CardMedia, Container, Grid, TextField } from '@material-ui/core';
+import { Container } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { fetchCountries } from '../../api/api.js';
 
 import './Main.scss';
 import CountryCard from './CountryCard/CountryCard.js';
+import Navbar from './Navbar/Navbar.js';
+import { getCountries } from '../../actions/countries.js';
 
 function Main() {
-  
+    const dispatch = useDispatch();
+    const cachedCountries = useSelector( (state) => state.countries );
+
     const [countries, setCountries] = useState([]);
     const [countriesToRender, setCountriesToRender] = useState({
         loading: false,
@@ -15,15 +19,29 @@ function Main() {
     });
     const [favCountries, setFavCountries] = useState([]);
     const [filterPhrase, setFilterPhrase] = useState('');
+    const [rerender, setRerender] = useState(false);
+
+    const updateCountries = () => {
+        setCountries( cachedCountries );
+        setCountriesToRender({ ...countriesToRender, countries: cachedCountries });
+    }
 
     useEffect(() => {
-        fetchCountries()
-        .then(res => {
-            setCountries(res.data.map(country => ({ ...country, fav: false })) );
-            setCountriesToRender({ ...countriesToRender, countries: res.data.map(country => ({ ...country, fav: false })) });
-            setFavCountries([]);
-        });
+        if (cachedCountries.length === 0) {
+            console.log("sent countries request");
+            dispatch(getCountries());
+        } else {
+            setRerender(!rerender);
+        }
     }, []);
+
+    useEffect(() => {
+        setRerender(!rerender);
+    }, [cachedCountries]);
+
+    useEffect(() => {
+        updateCountries();
+    }, [rerender])
 
     useEffect(() => {
         const newCountries = countries.filter((country) => {
@@ -49,20 +67,7 @@ function Main() {
 
     return (
         <div className="main">
-            <div className="navbar">
-            <Container maxWidth="sm" className="nav-container">
-                <div syle={{ position: 'relative', height: '100%' }}>
-                    <TextField 
-                        label="filter countries"
-                        name="filter"
-                        variant="outlined" 
-                        fullWidth={true}
-                        value={filterPhrase}
-                        onChange={(e) => setFilterPhrase(e.target.value)}
-                    />
-                </div>
-            </Container>
-        </div>
+        <Navbar phrase={filterPhrase} setPhrase={setFilterPhrase} />
         <Container className="main-container" maxWidth="md">
             {favCountries.length > 0 
             ? favCountries.map((country) => (<CountryCard key={country.alpha3Code + '_fav'} country={country} updateFavs={updateFavourites} />) ) 
