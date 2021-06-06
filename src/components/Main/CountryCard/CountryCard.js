@@ -24,8 +24,7 @@ function CountryCard(props) {
                                     <h1><strong className="alpha3">{props.country.alpha3Code}</strong> {props.country.name}</h1>
                                 </div>
                             </Grid>
-
-                            <Grid item xs={2}>
+                            {!props.alterDisplay && (<Grid item xs={2}>
                                 <div className="vert-center">
                                     <div className="holidays">
                                         <Link to={`/calendar/${props.country.alpha2Code}`}>
@@ -35,7 +34,7 @@ function CountryCard(props) {
                                         </Link>
                                     </div>
                                 </div>
-                            </Grid>
+                            </Grid>)}
 
                             <Grid item xs={1}>
                                 <div className="vert-center">

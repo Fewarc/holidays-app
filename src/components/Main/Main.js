@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import './Main.scss';
 import CountryCard from './CountryCard/CountryCard.js';
 import Navbar from './Navbar/Navbar.js';
-import { getCountries } from '../../actions/countries.js';
+import { getCountries, updateCachedCountries } from '../../actions/countries.js';
 
 function Main() {
     const dispatch = useDispatch();
@@ -31,7 +31,10 @@ function Main() {
             console.log("sent countries request");
             dispatch(getCountries());
         } else {
-            setRerender(!rerender);
+            setFavCountries(cachedCountries.filter((country) => {
+                return country.fav;
+            }));
+            // setRerender(!rerender);
         }
     }, []);
 
@@ -41,11 +44,11 @@ function Main() {
 
     useEffect(() => {
         updateCountries();
-    }, [rerender])
+    }, [rerender]);
 
     useEffect(() => {
         const newCountries = countries.filter((country) => {
-            return country.name.includes(filterPhrase);
+            return country.name.toLowerCase().includes(filterPhrase.toLowerCase());
         });
         setCountriesToRender({ ...countriesToRender, countries: newCountries });
     }, [filterPhrase]);
@@ -55,6 +58,7 @@ function Main() {
         const updateIndex = updatedCountries.findIndex(e => e.alpha3Code === country.alpha3Code);
         updatedCountries[updateIndex] = { ...updatedCountries[updateIndex], fav: !updatedCountries[updateIndex].fav } // REFACTOR FOR SHOO, SHEEEEEE
         setCountriesToRender({ ...countriesToRender, countries: updatedCountries });
+        dispatch(updateCachedCountries(updatedCountries));
         
         if (country.fav) {
             setFavCountries(favCountries.filter((c) => {
@@ -76,7 +80,7 @@ function Main() {
             <br/><hr></hr><br/>
 
             {countriesToRender.countries.map((country) => (
-                <CountryCard key={country.alpha3Code} country={country} updateFavs={updateFavourites} />
+                <CountryCard key={country.alpha3Code} country={country} updateFavs={updateFavourites} alterDisplay={false} />
             ))}
         </Container>
     </div>

@@ -4,6 +4,9 @@ export default (countries = [], action) => {
         case 'FETCH_COUNTRIES':
             return action.payload.map(country => ({ ...country, fav: false }));
         
+        case 'UPDATE_COUNTRIES':
+            return action.payload;
+
         default:
             return countries;
     }
