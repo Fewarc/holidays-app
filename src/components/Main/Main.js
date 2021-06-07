@@ -34,7 +34,6 @@ function Main() {
             setFavCountries(cachedCountries.filter((country) => {
                 return country.fav;
             }));
-            // setRerender(!rerender);
         }
     }, []);
 
