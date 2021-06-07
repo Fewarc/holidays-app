@@ -39,6 +39,7 @@ function Main() {
 
     useEffect(() => {
         setRerender(!rerender);
+        setFilterPhrase('');
     }, [cachedCountries]);
 
     useEffect(() => {
@@ -53,10 +54,11 @@ function Main() {
     }, [filterPhrase]);
 
     const updateFavourites = (country) => {
-        const updatedCountries = [...countriesToRender.countries];
+        const updatedCountries = [...cachedCountries];
         const updateIndex = updatedCountries.findIndex(e => e.alpha3Code === country.alpha3Code);
         updatedCountries[updateIndex] = { ...updatedCountries[updateIndex], fav: !updatedCountries[updateIndex].fav } // REFACTOR FOR SHOO, SHEEEEEE
         setCountriesToRender({ ...countriesToRender, countries: updatedCountries });
+        console.log(updatedCountries);
         dispatch(updateCachedCountries(updatedCountries));
         
         if (country.fav) {

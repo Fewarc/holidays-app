@@ -1,14 +1,13 @@
-import { Card, Container, Grid } from '@material-ui/core';
+import { Switch, Container, Grid, FormControlLabel } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { getHolidays } from '../../actions/calendar.js';
-import CountryCard from '../Main/CountryCard/CountryCard.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import CalendarCard from './CalendarCard/CalendarCard.js';
 
 import './CountryHoliday.scss';
-import CalendarCard from './CalendarCard/CalendarCard.js';
 
 function CountryHoliday({ match }) {
     const dispatch = useDispatch();
@@ -25,6 +24,11 @@ function CountryHoliday({ match }) {
     });
     const [calendarDays, setCalendarDays] = useState([]);
 
+    const [toggles, setToggles] = useState({
+        onlyPublic: false,
+        nativeLanguage: false,
+    });
+
     const country = cachedCountries.find( (country) => {
         if (country.alpha2Code === calendarData.country)
             return true;
@@ -38,25 +42,30 @@ function CountryHoliday({ match }) {
     }, []);
 
     useEffect(() => {
-        console.log(cachedCalendar);
+        buildCalendar();
     }, [cachedCalendar]);
 
-    const updateYear = (val) => {
-        if (calendarData.year + val <= new Date().getFullYear() - 1) {
-            setCalendarData({ ...calendarData, year: calendarData.year + val }); // TODO: disptach
-        } 
-    }
+    useEffect(() => {
+        buildCalendar();
+    }, [calendarData.month]);
+
+    // const updateYear = (val) => {
+    //     if (calendarData.year + val <= new Date().getFullYear() - 1) {
+    //         setCalendarData({ ...calendarData, year: calendarData.year + val });
+    //         dispatch(getHolidays(calendarData.country, calendarData.year));
+    //     } 
+    // }
 
     const updateMonth = (val) => {
-        if (calendarData.month + val > 12) {
+        if (calendarData.month + val > 11) {
             if (calendarData.year === new Date().getFullYear() - 1) {
-                setCalendarData({ ...calendarData, month: 12 });
+                setCalendarData({ ...calendarData, month: 11 });
             } else {
-                setCalendarData({ ...calendarData, year: calendarData.year + 1, month: 1 });
+                setCalendarData({ ...calendarData, year: calendarData.year + 1, month: 0 });
             }
         }else {
-            if(calendarData.month + val < 1) {
-                setCalendarData({ ...calendarData, year: calendarData.year - 1, month: 12 });
+            if(calendarData.month + val < 0) {
+                setCalendarData({ ...calendarData, year: calendarData.year, month: 11 });
             } else {
                 setCalendarData({ ...calendarData, month: calendarData.month + val });
             }
@@ -69,7 +78,7 @@ function CountryHoliday({ match }) {
 
         while (date.getMonth() === calendarData.month) {
             days.push({ 
-                weekDay: new Date(date).getDay(),
+                weekDay: new Date(date).getDay() === 0 ? 6 : new Date(date).getDay() - 1, // make monday a first day of the week
                 monthDay: new Date(date).getDate(),
                 month: new Date(date).getMonth() + 1,
             });
@@ -77,15 +86,15 @@ function CountryHoliday({ match }) {
         }     
 
         var newDays = days.map((day) => ({ ...day, holiday: checkHoliday(day.month, day.monthDay) }));  // check if holiday occurs
-
+        
         for (var i = 0; i < days[0].weekDay; i++) { // add blank days on the beginning
-            newDays = [{ monthDay: -1 }, ...newDays ];
+            newDays = [{ monthDay: -1, holiday: {occurs: false} }, ...newDays ];
         }
 
         for (var i = 0; i < 6 - days[days.length - 1].weekDay; i++) { // add blank days on the end
-            newDays = [ ...newDays, { monthDay: -1 } ];
+            newDays = [ ...newDays, { monthDay: -1, holiday: {occurs: false} } ];
         }
-
+        
         var groupedDays = [];
 
         for (var i = 0; i < newDays.length; i++) {  // group week by week
@@ -94,7 +103,7 @@ function CountryHoliday({ match }) {
             }
             groupedDays[Math.floor(i * 1/7)].push(newDays[i]);
         }
-        console.log(groupedDays);
+        
         setCalendarDays(groupedDays);
     }
     
@@ -115,12 +124,22 @@ function CountryHoliday({ match }) {
     return (
     <div>
         <Container maxWidth="xl">
-            <CountryCard country={country} updateFavs={() => {}} alterDisplay={true}/> {/** TODO yeet the country card and ADD TOGGLE */}
+            <img src={country.flag} className="calendar-flag"/>
+            <h1>{country.name}</h1>
+            <FormControlLabel
+                control={<Switch checked={toggles.onlyPublic} onChange={() => setToggles({ ...toggles, onlyPublic: !toggles.onlyPublic })} />}
+                label="Show only public holidays" 
+            />    
+            <FormControlLabel
+                control={<Switch checked={toggles.nativeLanguage} onChange={() => setToggles({ ...toggles, nativeLanguage: !toggles.nativeLanguage })} />}
+                label="Holiday name in native language"
+                disabled={!cachedCalendar.translable}
+            />        
             <div>
                 <h1>
-                    <FontAwesomeIcon className="calendar-icon" icon={faCaretLeft} size="1x" onClick={() => buildCalendar()}/>{/**updateYear(-1) */}
+                    <FontAwesomeIcon className="calendar-icon" icon={faCaretLeft} size="1x" onClick={() => {}}/> {/** (updateYear(-1) */}
                     {calendarData.year}
-                    <FontAwesomeIcon className="calendar-icon" icon={faCaretRight} size="1x" onClick={() => updateYear(1)}/>
+                    <FontAwesomeIcon className="calendar-icon" icon={faCaretRight} size="1x" onClick={() => {}}/> {/** updateYear(1) */}
                 </h1>
             </div>
             <div>
@@ -131,11 +150,6 @@ function CountryHoliday({ match }) {
                 </h1>
             </div>
             <Grid container justify="space-evenly">
-                <Grid item xs={1}>
-                    <div className="day-div">
-                        <p>SUN</p>
-                    </div>
-                </Grid>
                 <Grid item xs={1} >
                     <div className="day-div">
                         <p>MON</p>
@@ -166,14 +180,20 @@ function CountryHoliday({ match }) {
                         <p>SAT</p>
                     </div>
                 </Grid>
+                <Grid item xs={1}>
+                    <div className="day-div">
+                        <p>SUN</p>
+                    </div>
+                </Grid>
             </Grid>
-            {calendarDays.map(week => (
-                <Grid container justify="space-evenly" className="calendar-row">
-                    {week.map(day => (
-                        <Grid item xs={1}>
-                            <CalendarCard day={day}/>
+            {calendarDays.map((week, index) => (
+                <Grid key={index + week[0].weekDay} container justify="space-evenly" className="calendar-row">
+                    {week.map((day, index) => (
+                        <Grid key={index + day.monthDay} item xs={1}>
+                            <CalendarCard day={day} onlyPublic={toggles.onlyPublic} nativeLanguage={toggles.nativeLanguage} />
                         </Grid>))}
                 </Grid>))}
+            
                 <div style={{height: "100px"}}></div>
         </Container>
     </div>);

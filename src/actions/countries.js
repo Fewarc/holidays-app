@@ -11,7 +11,6 @@ export const getCountries = () => async(dispatch) => {
 
 export const updateCachedCountries = (countries) => async(dispatch) => {
     try {
-        console.log(countries);
         dispatch({ type: 'UPDATE_COUNTRIES', payload: countries });
     } catch (error) {
         console.log(error);
