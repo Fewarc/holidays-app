@@ -3,6 +3,7 @@ import * as api from '../api/api.js';
 export const getCountries = () => async(dispatch) => {
     try {
         const { data } = await api.fetchCountries();
+        console.log(data);
         dispatch({ type: 'FETCH_COUNTRIES', payload: data });
     } catch (error) {
         console.log(error.messsage);

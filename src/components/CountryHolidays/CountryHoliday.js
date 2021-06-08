@@ -37,7 +37,8 @@ function CountryHoliday({ match }) {
     useEffect(() => {
         if (cachedCalendar.country !== match.params.alpha2 || cachedCalendar.country === '') {
             console.log('sent holiday request');
-            dispatch(getHolidays(calendarData.country, calendarData.year));
+            dispatch(getHolidays(calendarData.country, calendarData.year, country.languages.map(c => ( c.iso639_1 ))));
+            console.log(country.languages.map(c => ( c.iso639_1 )));
         }
     }, []);
 
@@ -120,7 +121,7 @@ function CountryHoliday({ match }) {
             }
         }
     }
-
+    
     return (
     <div>
         <Container maxWidth="xl">

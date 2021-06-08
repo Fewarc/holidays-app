@@ -9,6 +9,9 @@
 
     & p {
         font-size: 2rem;
+        @media (max-width: 600px) {
+            font-size: 1rem;
+        }
     }
 }
 
@@ -26,13 +29,15 @@
     width: 100%;
     height: 100%;
     position: relative;
-
+    z-index: 1;
+    
     & p {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
         color: rgba(0, 0, 0, 0.199);
         z-index: 1;
+        position: relative;
     }
 
     &:hover {
@@ -53,9 +58,12 @@
     position: absolute;
     bottom: -45%;
     right: 0;
+    z-index: -1;
 
-    & h1 {
-        z-index: -1;
+    @media (max-width: 900px) {
+        font-size: 0.5rem;
+        opacity: 100%;
+        bottom: 5%;
     }
 }
 

@@ -84,6 +84,7 @@ function Main() {
                 <CountryCard key={country.alpha3Code} country={country} updateFavs={updateFavourites} alterDisplay={false} />
             ))}
         </Container>
+        <div style={{height: "100px"}}></div>
     </div>
   );
 }

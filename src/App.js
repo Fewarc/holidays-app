@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Main from './components/Main/Main';
 import CountryHolidays from './components/CountryHolidays/CountryHoliday.js';
 
-import './App.css';
+import './App.scss';
 
 function App() {
   return (

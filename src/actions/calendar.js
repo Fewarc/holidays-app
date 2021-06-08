@@ -1,11 +1,14 @@
 import * as api from '../api/api.js';
 
-export const getHolidays = (country, year) => async(dispatch) => {
+export const getHolidays = (country, year, languages) => async(dispatch) => {
     try {
         const { data } = await api.fetchHolidays(country, year);
         dispatch({ type: 'FETCH_HOLIDAYS', payload: data });
-        if (data.availableFilters.language.find(e => (country.toLowerCase())) !== 'undefined') {
-            const { data } = await api.fetchHolidays(country, year, country.toLowerCase());
+
+        const iso639_1 = data.availableFilters.language.find(e => (languages.includes(e)));
+
+        if ( typeof iso639_1 !== 'undefined') {
+            const { data } = await api.fetchHolidays(country, year, iso639_1);
             dispatch({ type: 'FETCH_TRANSLATIONS', payload: data });
         }
         

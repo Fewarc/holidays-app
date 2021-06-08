@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import reducers from './reducers';
 
-import './index.css';
+import './index.scss';
 
-const store = createStore(reducers, compose(applyMiddleware(thunk)));
+const store = createStore(reducers, compose(applyMiddleware(thunk))); // variable to hold global data
 
 ReactDOM.render(
   <React.StrictMode>
