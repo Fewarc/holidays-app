@@ -1,4 +1,4 @@
-import { Switch, Container, Grid, FormControlLabel } from '@material-ui/core';
+import { Switch, Container, Grid, FormControlLabel, Checkbox } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
@@ -122,7 +122,7 @@ function CountryHoliday({ match }) {
             <img src={country.flag} className="calendar-flag"/>
             <h1>{country.name}</h1>
             <FormControlLabel
-                control={<Switch checked={toggles.onlyPublic} onChange={() => setToggles({ ...toggles, onlyPublic: !toggles.onlyPublic })} />}
+                control={<Checkbox checked={toggles.onlyPublic} onChange={() => setToggles({ ...toggles, onlyPublic: !toggles.onlyPublic })} />}
                 label="Show only public holidays" 
             />    
             <FormControlLabel
