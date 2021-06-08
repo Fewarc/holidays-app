@@ -12,18 +12,15 @@ function Main() {
     const dispatch = useDispatch();
     const cachedCountries = useSelector( (state) => state.countries );
 
-    const [countries, setCountries] = useState([]);
-    const [countriesToRender, setCountriesToRender] = useState({
-        loading: false,
-        countries: []
-    });
+    const [countries, setCountries] = useState([]);                     // 
+    const [countriesToRender, setCountriesToRender] = useState([]);
     const [favCountries, setFavCountries] = useState([]);
     const [filterPhrase, setFilterPhrase] = useState('');
     const [rerender, setRerender] = useState(false);
 
     const updateCountries = () => {
-        setCountries( cachedCountries );
-        setCountriesToRender({ ...countriesToRender, countries: cachedCountries });
+        setCountries(cachedCountries);
+        setCountriesToRender(cachedCountries);
     }
 
     useEffect(() => {
@@ -50,14 +47,14 @@ function Main() {
         const newCountries = countries.filter((country) => {
             return country.name.toLowerCase().includes(filterPhrase.toLowerCase());
         });
-        setCountriesToRender({ ...countriesToRender, countries: newCountries });
+        setCountriesToRender(newCountries);
     }, [filterPhrase]);
 
     const updateFavourites = (country) => {
         const updatedCountries = [...cachedCountries];
         const updateIndex = updatedCountries.findIndex(e => e.alpha3Code === country.alpha3Code);
         updatedCountries[updateIndex] = { ...updatedCountries[updateIndex], fav: !updatedCountries[updateIndex].fav } // REFACTOR FOR SHOO, SHEEEEEE
-        setCountriesToRender({ ...countriesToRender, countries: updatedCountries });
+        setCountriesToRender(updatedCountries);
         console.log(updatedCountries);
         dispatch(updateCachedCountries(updatedCountries));
         
@@ -80,7 +77,7 @@ function Main() {
             
             <br/><hr></hr><br/>
 
-            {countriesToRender.countries.map((country) => (
+            {countriesToRender.map((country) => (
                 <CountryCard key={country.alpha3Code} country={country} updateFavs={updateFavourites} alterDisplay={false} />
             ))}
         </Container>
