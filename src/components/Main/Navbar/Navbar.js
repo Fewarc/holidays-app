@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, TextField } from '@material-ui/core';
 
-
 function Navbar(props) {
     return (
         <div className="navbar">
