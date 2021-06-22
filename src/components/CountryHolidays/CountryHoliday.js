@@ -44,7 +44,6 @@ function CountryHoliday({ match }) {
         if ( cachedCalendar.country === match.params.alpha2 && cachedCalendar.country !== '' ) {
             setToggles({ ...toggles, loading: false });
         }
-        console.log(toggles.loading);
     }, [cachedCalendar, calendarData.month]);
 
     // const updateYear = (val) => {    // handle year change                        // DISABLED*

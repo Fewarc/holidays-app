@@ -45,7 +45,7 @@ function CountryCard(props) {
                                 style={props.country.fav ? { color: "gold", opacity: "100%" } : {}} 
                                 icon={props.country.fav ? faStar : faRegStar} 
                                 size={matches650 ? "3x" : "2x"}
-                                onClick={() => props.updateFavs(props.country)}
+                                onClick={props.onUpdateFavs}
                                 />
                         </div>
                     </Grid>

@@ -55,13 +55,13 @@ function Main() {
         <Navbar phrase={filterPhrase} setPhrase={setFilterPhrase} /> {/** Navbar with setFilterFunction passed to it */}
         <Container className="main-container" maxWidth="md">
             {favCountries.length > 0 // display favCountries or just info if they are empty
-            ? favCountries.map(country => (<CountryCard key={country.alpha3Code + '_fav'} country={country} updateFavs={updateFavourites} />) ) 
+            ? favCountries.map(country => (<CountryCard key={country.alpha3Code + '_fav'} country={country} onUpdateFavs={() => updateFavourites(country)} />)) 
             : <h3 className="fav-msg"><i>You've got no favourite countries</i></h3>}
             
             <br/><hr></hr><br/>
 
             {countriesToRender.map(country => ( // display all countries 
-                <CountryCard key={country.alpha3Code} country={country} updateFavs={updateFavourites} />
+                <CountryCard key={country.alpha3Code} country={country} onUpdateFavs={() => updateFavourites(country)} />
             ))}
         </Container>
         <div style={{height: "100px"}/** SPACER */}></div> 
