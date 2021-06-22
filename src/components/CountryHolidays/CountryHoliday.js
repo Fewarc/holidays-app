@@ -1,4 +1,4 @@
-import { Switch, Container, Grid, FormControlLabel, Checkbox } from '@material-ui/core';
+import { Switch, Container, Grid, FormControlLabel, Checkbox, CircularProgress } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
@@ -26,12 +26,14 @@ function CountryHoliday({ match }) {
     const [toggles, setToggles] = useState({ // toggle states
         onlyPublic: false,
         nativeLanguage: false,
+        loading: true,
     });
 
     const country = cachedCountries.find(country => country.alpha2Code === calendarData.country); // find chosen country
 
     useEffect(() => {
         if ( cachedCalendar.country !== match.params.alpha2 || cachedCalendar.country === '' ) {
+            setToggles({ ...toggles, loading: true });
             console.log('sent holiday request');
             dispatch(getHolidays(calendarData.country, calendarData.year, country.languages.map(c => c.iso639_1)));
         }
@@ -39,6 +41,10 @@ function CountryHoliday({ match }) {
 
     useEffect(() => {   // once cachedClendar changes due to api response or year/month change calendar updates
         buildCalendar();
+        if ( cachedCalendar.country === match.params.alpha2 && cachedCalendar.country !== '' ) {
+            setToggles({ ...toggles, loading: false });
+        }
+        console.log(toggles.loading);
     }, [cachedCalendar, calendarData.month]);
 
     // const updateYear = (val) => {    // handle year change                        // DISABLED*
@@ -181,7 +187,7 @@ function CountryHoliday({ match }) {
                     </div>
                 </Grid>
             </Grid>
-            {calendarDays.map((week, index) => (    // map every week
+            {toggles.loading ? <CircularProgress color="secondary" /> : calendarDays.map((week, index) => (    // map every week
                 <Grid key={index + week[0].weekDay} container justify="space-evenly" className="calendar-row">
                     {week.map((day, index) => ( // map every day of the week
                         <Grid key={index + day.monthDay} item xs={1}>
